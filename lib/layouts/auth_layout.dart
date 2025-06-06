@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/theme.dart';
+import '../components/title_subtitle_text.dart';
 
 class Authlayout extends StatefulWidget {
   final Widget? child;
@@ -13,139 +14,115 @@ class Authlayout extends StatefulWidget {
 class _AuthLayoutState extends State<Authlayout> {
   @override
   Widget build(BuildContext context) {
-    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Column(
-              children: [
-                if (!keyboardOpen) const _AuthHeaderDesign(),
-                Expanded(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 10),
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 25,
-                              // vertical: 100,
-                            ),
-                            // child: AnimatedSwitcher(
-                            //   duration: Duration(milliseconds: 300),
-                            //   transitionBuilder: (child, animation) {
-                            //     return FadeTransition(
-                            //       opacity: animation,
-                            //       child: child,
-                            //     );
-                            //   },
-                            child: widget.child,
-                            // ),
-                          ),
-                        ],
-                      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background.png"),
+            repeat: ImageRepeat.repeat,
+            opacity: 0.3,
+            fit: BoxFit.contain,
+            alignment: Alignment.center,
+            scale: 1.5,
+          ),
+          gradient: LinearGradient(
+            colors: [Color(0xFFE96A32), Color(0xFFF13B09)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+          child: Column(
+            children: [
+              SizedBox(
+                height: screenSize.height * 0.25,
+                child: Center(
+                  child: Text(
+                    'Handflow',
+                    style: TextStyle(
+                      fontFamily: 'EduSABeginner',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 48,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _AuthHeaderDesign extends StatelessWidget {
-  const _AuthHeaderDesign({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // 🔽 1. BACK CIRCLE (goes under everything)
-        Positioned(
-          bottom: -35,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color:
-                    Theme.of(
-                      context,
-                    ).scaffoldBackgroundColor, // Match background
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(51),
-                    blurRadius: 10,
-                    offset: Offset(0, 4), // Downward shadow
-                  ),
-                ],
               ),
-            ),
-          ),
-        ),
-
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-            color: orange,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(100),
-              bottomRight: Radius.circular(100),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(38),
-                blurRadius: 15,
-                offset: Offset(0, 6),
+              SizedBox(
+                height: screenSize.height - screenSize.height * 0.25,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: -MediaQuery.of(context).size.height * (14 / 650),
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.84,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(178),
+                            borderRadius: BorderRadius.circular(45),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(20),
+                                blurRadius: 16,
+                                offset: Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadiusDirectional.vertical(
+                          top: Radius.circular(45),
+                          bottom: Radius.circular(0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              (MediaQuery.of(context).size.width * 51) / 402,
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.037,
+                              ),
+                              child: TitleSubtitleText(
+                                title: 'Get Started now',
+                                subtitle:
+                                    'Create an account or log in to explore\nabout our app',
+                              ),
+                            ),
+                            Expanded(child: widget.child!),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.032,
+                              ),
+                              child: Image.asset('assets/logo.png'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-          child: Center(
-            child: Text(
-              'HandFlow',
-              style: theme.textTheme.headlineLarge!.copyWith(
-                color: Colors.white,
-              ),
-            ),
-          ),
         ),
-
-        // 🔽 3. FRONT CIRCLE (image container)
-        Positioned(
-          bottom: -35,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: ClipOval(
-                  child: Image.asset('assets/icon1.png', fit: BoxFit.contain),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

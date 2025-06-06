@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:handflow/theme.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -23,7 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           Page1(controller: _pageController),
           Page2(controller: _pageController),
-          Page3(controller: _pageController),
+          QRScannerPage(controller: _pageController),
         ],
       ),
     );
@@ -243,11 +245,125 @@ class Page2 extends StatelessWidget {
   }
 }
 
-class Page3 extends StatelessWidget {
-  final PageController controller;
-  const Page3({required this.controller});
+class QRScannerPage extends StatefulWidget {
+  final PageController? controller;
+
+  const QRScannerPage({super.key, required this.controller});
+
+  @override
+  State<QRScannerPage> createState() => _QRScannerPageState();
+}
+
+class _QRScannerPageState extends State<QRScannerPage> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
+  String? scannedCode;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestCameraPermission();
+  }
+
+  Future<void> _requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    if (status.isDenied || status.isPermanentlyDenied) {
+      await showDialog(
+        context: context,
+        builder:
+            (_) => AlertDialog(
+              title: const Text('Camera Permission'),
+              content: const Text(
+                'Camera permission is required to scan QR codes.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+      );
+      openAppSettings(); // Let user manually enable
+    }
+    setState(() {}); // Trigger rebuild after permission check
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    controller?.pauseCamera();
+    controller?.resumeCamera();
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  void _onQRViewCreated(QRViewController qrController) {
+    controller = qrController;
+    qrController.scannedDataStream.listen((scanData) {
+      if (scannedCode == null) {
+        setState(() {
+          scannedCode = scanData.code;
+        });
+        controller?.pauseCamera(); // Stop scanning after successful read
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Page 3'));
+    return Scaffold(
+      appBar: AppBar(title: const Text('Scan Your Device')),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Colors.green,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+                cutOutSize: MediaQuery.of(context).size.width * 0.7,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (scannedCode != null)
+                  Text(
+                    'Scanned Code: $scannedCode',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  )
+                else
+                  Text(
+                    'Scanning...',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: scannedCode != null ? _handleCapture : null,
+                  child: const Text('Capture'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleCapture() {
+    debugPrint('Captured Code: $scannedCode');
+    // Navigate or handle logic as needed
   }
 }

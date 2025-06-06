@@ -25,11 +25,13 @@ class ClickableText extends StatelessWidget {
       onTap: onTap,
       child: Text(
         text,
-        style: style ??
+        style:
+            style ??
             theme.textTheme.bodyMedium?.copyWith(
               color: defaultColor,
-              decoration: underline ? TextDecoration.underline : TextDecoration.none,
-              fontWeight: FontWeight.w600,
+              decoration:
+                  underline ? TextDecoration.underline : TextDecoration.none,
+              fontWeight: FontWeight.w500,
             ),
       ),
     );

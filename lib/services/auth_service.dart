@@ -29,8 +29,6 @@ Future<String> login(String username, String password) async {
 }
 
 Future<String> signup(
-  String fullname,
-  String username,
   String email,
   String password,
 ) async {
@@ -41,9 +39,7 @@ Future<String> signup(
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'username': username,
         'email': email,
-        'fullname': fullname,
         'password': password,
       }),
     );

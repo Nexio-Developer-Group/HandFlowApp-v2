@@ -1,38 +1,84 @@
-import 'package:go_router/go_router.dart';
-// import 'package:handflow/data_models/onboarding_state.dart';
-import 'package:handflow/layouts/auth_layout.dart';
-import 'package:handflow/features/landing_screen/home.dart';
-import 'features/auth/login_form.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:handflow/layouts/auth_layout.dart';
+import 'features/auth/login_form.dart';
 import 'features/auth/signup_form.dart';
 import 'features/onboarding/onboarding_screens.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/onboarding',
+  initialLocation: '/login',
   routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return Authlayout(child: child);
-      },
-      routes: [
-        GoRoute(
-          path: '/auth/login',
-          pageBuilder:
-              (context, state) =>
-                  NoTransitionPage(child: LoginForm(key: ValueKey('login'))),
-        ),
-        GoRoute(
-          path: '/auth/signup',
-          pageBuilder:
-              (context, state) =>
-                  NoTransitionPage(child: SignupForm(key: ValueKey('signup'))),
-        ),
-      ],
+    GoRoute(
+      path: '/signup',
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: Authlayout(child: SignupForm()),
+            transitionsBuilder: _slideFromRightTransition,
+          ),
     ),
-    GoRoute(path: '/home', builder: (context, state) => HomePage()),
+    GoRoute(
+      path: '/login',
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: Authlayout(child: LoginForm()),
+            transitionsBuilder: _slideFromLeftTransition,
+          ),
+    ),
     GoRoute(
       path: '/onboarding',
-      builder: (context, state) => OnboardingScreen(),
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: OnboardingScreen(),
+            transitionsBuilder: _slideTransition,
+          ),
     ),
   ],
 );
+
+Widget _slideTransition(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  return SlideTransition(
+    position: Tween<Offset>(
+      begin: const Offset(1, 0), // Slide from right
+      end: Offset.zero,
+    ).animate(animation),
+    child: child,
+  );
+}
+
+Widget _slideFromRightTransition(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  return SlideTransition(
+    position: Tween<Offset>(
+      begin: const Offset(1, 0), // Slide from right
+      end: Offset.zero,
+    ).animate(animation),
+    child: child,
+  );
+}
+
+Widget _slideFromLeftTransition(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  return SlideTransition(
+    position: Tween<Offset>(
+      begin: const Offset(-1, 0), // Slide from left
+      end: Offset.zero,
+    ).animate(animation),
+    child: child,
+  );
+}

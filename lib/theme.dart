@@ -16,13 +16,11 @@ ThemeData appTheme = ThemeData(
 
   inputDecorationTheme: InputDecorationTheme(
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black, width: 1),
+      borderSide: BorderSide(color: Colors.black12, width: 1),
+      borderRadius: BorderRadius.circular(10),
     ),
-    // (
-    //   borderSide: BorderSide(color: Colors.black, width: 1),
-    // ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black, width: 1.5), //
+      borderSide: BorderSide(color: Colors.black12, width: 1), //
     ),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.red, width: 1), //
@@ -40,12 +38,12 @@ ThemeData appTheme = ThemeData(
 
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      // minimumSize: const Size.fromHeight(50),
+      minimumSize: const Size.fromHeight(50),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       // padding: const EdgeInsets.symmetric(horizontal: 24),
       backgroundColor: orange, // Explicitly set background here
       foregroundColor: Colors.white,
-      // textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+      textStyle: const TextStyle(fontSize: 16),
       elevation: 0,
     ),
   ),
@@ -57,5 +55,10 @@ ThemeData appTheme = ThemeData(
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
     ),
+  ),
+
+  checkboxTheme: CheckboxThemeData(
+    side: BorderSide(color: Colors.black87, width: 2),
+    checkColor: WidgetStatePropertyAll(orange),
   ),
 );
