@@ -51,46 +51,46 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
     }
 
     // Only call API if all required fields are filled
-    String response = await auth.login(username, password);
+    final result = await auth.login(username, password);
+    final int statusCode = result['statusCode'];
+    final String message = result['message'] ?? '';
 
-    if (response == "Login successful") {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Center(child: Text('Login successful!')),
+          content: Center(child: Text(message)),
           duration: Duration(seconds: 2),
         ),
       );
-    } else if (response == "Incorrect password") {
-      setState(() {
-        inputFields["password"]!.isErrored = true;
-        inputFields["password"]!.isShaking = true;
-      });
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Incorrect password. Please try again.")),
-      );
-      Future.delayed(const Duration(milliseconds: 300), () {
+    } else {
+      if (statusCode == 404) {
         setState(() {
-          inputFields["password"]!.isShaking = false;
+          inputFields["username"]!.isErrored = true;
+          inputFields["username"]!.isShaking = true;
         });
-      });
-    } else if (response == "Username not found") {
-      setState(() {
-        inputFields["username"]!.isErrored = true;
-        inputFields["username"]!.isShaking = true;
-      });
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Username not found. Please check your username."),
-        ),
-      );
-      Future.delayed(const Duration(milliseconds: 300), () {
+      } else if (statusCode == 401) {
         setState(() {
-          inputFields["username"]!.isShaking = false;
+          inputFields["password"]!.isErrored = true;
+          inputFields["password"]!.isShaking = true;
         });
-      });
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+      if (statusCode == 404) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          setState(() {
+            inputFields["username"]!.isShaking = false;
+          });
+        });
+      } else if (statusCode == 401) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          setState(() {
+            inputFields["password"]!.isShaking = false;
+          });
+        });
+      }
     }
   }
 
@@ -104,7 +104,7 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = TextTheme.of(context);
+    // TextTheme textTheme = TextTheme.of(context);
     final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,11 +123,12 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
               hintText: "Enter Email",
               required: true,
               isTextErrored: inputFields["username"]!.isErrored,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.emailAddress,
               isShaking: inputFields["username"]!.isShaking,
               errorMessage: inputFields["username"]!.errorMessage,
               focusNode: inputFields["username"]!.focusNode,
             ),
+            SizedBox(height: 16),
             PasswordField(
               fieldName: 'Password',
               controller: inputFields["password"]!.controller,
@@ -138,6 +139,7 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
               errorMessage: inputFields["password"]!.errorMessage,
               focusNode: inputFields["password"]!.focusNode,
             ),
+            SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,33 +148,58 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Checkbox(
-                      value: rememberMe,
-                      onChanged: (bool? newValue) {
-                        if (newValue == null) return;
-                        setState(() {
-                          rememberMe = newValue;
-                        });
-                      },
-                      activeColor: Colors.transparent,
-                    ),
-                    ClickableText(
-                      text: "Remember me",
-                      onTap: () {
-                        rememberMe = !rememberMe;
-                      },
-                      underline: false,
-                      // style: TextStyle(fontWeight: FontWeight.w600),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          // margin: EdgeInsets.all(3.96),
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: Transform.scale(
+                              scale: 0.8, // Increase size by 1.5x
+                              child: Checkbox(
+                                value: rememberMe,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    rememberMe = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        ClickableText(
+                          text: "Remember me",
+                          onTap: () {
+                            setState(() {
+                              rememberMe = !rememberMe;
+                            });
+                          },
+                          underline: false,
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Color(0xFF6C7278),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 ClickableText(
-                  text: 'Forget Password?',
+                  text: 'Forget Password ?',
                   onTap: () {
                     null;
                   },
                   underline: false,
-                  style: TextStyle(),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    color: Color(0xFFE96A32),
+                  ),
                 ),
               ],
             ),

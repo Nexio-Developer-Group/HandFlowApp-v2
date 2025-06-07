@@ -3,7 +3,7 @@ import 'package:handflow/theme.dart';
 import '../../components/password_field.dart';
 import '../../components/text_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../components/clickable_text.dart';
+// import '../../components/clickable_text.dart';
 import '../../data_models/input_field_state.dart';
 import '../../services/auth_service.dart' as auth;
 import '../../components/auth_dual_button.dart';
@@ -78,32 +78,51 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
     }
 
     // 4. Call API
-    String response = await auth.signup(
+    final result = await auth.signup(
       inputFields["email"]!.text,
       inputFields["password"]!.text,
     );
-    if (response == "Signup successful") {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    final int statusCode = result['statusCode'];
+    final String message = result['message'] ?? '';
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Center(child: Text('Signup successful!')),
+          content: Center(child: Text(message)),
           duration: Duration(seconds: 2),
         ),
       );
-    } else if (response == "Email already in use") {
+      // Call login after successful signup
+      final loginResult = await auth.login(
+        inputFields["email"]!.text,
+        inputFields["password"]!.text,
+      );
+      print(
+        "loginResult: $loginResult ******************************************",
+      );
+      if (loginResult['statusCode'] == 200) {
+        if (mounted) {
+          context.go('/onboarding');
+        }
+      }
+    } else if (statusCode == 400) {
       setState(() {
         inputFields["email"]!.isErrored = true;
         inputFields["email"]!.isShaking = true;
       });
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(response)));
+      ).showSnackBar(SnackBar(content: Text(message)));
       Future.delayed(const Duration(milliseconds: 300), () {
         setState(() {
           inputFields["email"]!.isShaking = false;
         });
       });
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -117,7 +136,7 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = TextTheme.of(context);
+    // TextTheme textTheme = TextTheme.of(context);
     final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,6 +160,7 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
               keyboardType: TextInputType.emailAddress,
               errorMessage: inputFields["email"]!.errorMessage,
             ),
+            SizedBox(height: 16),
             PasswordField(
               fieldName: "Password",
               controller: inputFields["password"]!.controller,
@@ -151,6 +171,7 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
               keyboardType: TextInputType.text,
               errorMessage: inputFields["password"]!.errorMessage,
             ),
+            SizedBox(height: 16),
             PasswordField(
               fieldName: "Confirm Password",
               controller: inputFields["confirmPassword"]!.controller,

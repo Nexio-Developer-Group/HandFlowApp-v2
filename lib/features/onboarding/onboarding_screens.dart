@@ -51,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget navigationButtons() {
     final textTheme = Theme.of(context).textTheme;
-    final Size screenSize = MediaQuery.of(context).size;
+    // final Size screenSize = MediaQuery.of(context).size;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -10,75 +10,15 @@ final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/signup',
-      pageBuilder:
-          (context, state) => CustomTransitionPage(
-            key: state.pageKey,
-            child: Authlayout(child: SignupForm()),
-            transitionsBuilder: _slideFromRightTransition,
-          ),
+      builder: (context, state) => Authlayout(child: SignupForm()),
     ),
     GoRoute(
       path: '/login',
-      pageBuilder:
-          (context, state) => CustomTransitionPage(
-            key: state.pageKey,
-            child: Authlayout(child: LoginForm()),
-            transitionsBuilder: _slideFromLeftTransition,
-          ),
+      builder: (context, state) => Authlayout(child: LoginForm()),
     ),
     GoRoute(
       path: '/onboarding',
-      pageBuilder:
-          (context, state) => CustomTransitionPage(
-            key: state.pageKey,
-            child: OnboardingScreen(),
-            transitionsBuilder: _slideTransition,
-          ),
+      builder: (context, state) => OnboardingScreen(),
     ),
   ],
 );
-
-Widget _slideTransition(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  return SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(1, 0), // Slide from right
-      end: Offset.zero,
-    ).animate(animation),
-    child: child,
-  );
-}
-
-Widget _slideFromRightTransition(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  return SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(1, 0), // Slide from right
-      end: Offset.zero,
-    ).animate(animation),
-    child: child,
-  );
-}
-
-Widget _slideFromLeftTransition(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  return SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(-1, 0), // Slide from left
-      end: Offset.zero,
-    ).animate(animation),
-    child: child,
-  );
-}

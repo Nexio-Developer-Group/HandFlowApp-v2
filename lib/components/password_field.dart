@@ -235,21 +235,19 @@ class _PasswordFieldState extends State<PasswordField> {
       duration: Duration(milliseconds: 300),
       shake: _shouldShake,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Fixed label above the input box
             if (widget.fieldName != null)
               Text(
                 widget.fieldName!,
                 style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  // fontSize: 16,
-                  // color: _hasError ? Colors.red : Colors.black,
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF6C7278),
                 ),
               ),
-            if (widget.fieldName != null) SizedBox(height: 5),
+            if (widget.fieldName != null) SizedBox(height: 2),
 
             TextFormField(
               controller: _controller,

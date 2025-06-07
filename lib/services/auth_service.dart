@@ -3,56 +3,66 @@ import 'package:http/http.dart' as http;
 
 final String _baseUrl = "http://20.244.50.12:3011";
 
-Future<String> login(String username, String password) async {
-  final url = Uri.parse("$_baseUrl/login");
+Future<Map<String, dynamic>> login(String email, String password) async {
+  final url = Uri.parse("$_baseUrl/auth/login");
 
   try {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'username': username, 'password': password}),
+      body: jsonEncode({'email': email, 'password': password}),
     );
+    final data = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final token = data['token'];
-      print("Login successful. Token: $token");
-      return "Login successful";
+      final accessToken = data['access_token'];
+      final refreshToken = data['refresh_token'];
+      final expiresIn = data['expires_in'];
+      print("Login successful. Access Token: $accessToken");
+      return {
+        'statusCode': response.statusCode,
+        'message': 'Login successful',
+        'access_token': accessToken,
+        'refresh_token': refreshToken,
+        'expires_in': expiresIn,
+      };
     } else {
-      final error = jsonDecode(response.body);
-      print("Login failed: ${error['detail']}");
-      return error['detail'];
+      print("Login failed: " + (data['detail'] ?? data['message'] ?? 'Error'));
+      return {
+        'statusCode': response.statusCode,
+        'message': data['detail'] ?? data['message'] ?? 'Error',
+      };
     }
   } catch (e) {
     print("Error: $e");
-    return "An error occurred";
+    return {'statusCode': 500, 'message': 'An error occurred'};
   }
 }
 
-Future<String> signup(
-  String email,
-  String password,
-) async {
-  final url = Uri.parse("$_baseUrl/signup");
+Future<Map<String, dynamic>> signup(String email, String password) async {
+  final url = Uri.parse("$_baseUrl/auth/signup");
 
   try {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
+      body: jsonEncode({'email': email, 'password': password}),
     );
+    final data = jsonDecode(response.body);
     if (response.statusCode == 200) {
       print("Signup successful.");
-      return "Signup successful";
+      return {
+        'statusCode': response.statusCode,
+        'message': data['message'] ?? 'Signup successful',
+      };
     } else {
-      final error = jsonDecode(response.body);
-      print("Login failed: ${error['detail']}");
-      return error['detail'];
+      print("Signup failed: " + (data['detail'] ?? data['message'] ?? 'Error'));
+      return {
+        'statusCode': response.statusCode,
+        'message': data['detail'] ?? data['message'] ?? 'Error',
+      };
     }
   } catch (e) {
     print("Error: $e");
-    return "An error occurred";
+    return {'statusCode': 500, 'message': 'An error occurred'};
   }
 }

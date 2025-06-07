@@ -90,17 +90,21 @@ class _CustomTextField extends State<CustomTextField>
       duration: Duration(milliseconds: 300),
       shake: _shouldShake,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
+        // margin: EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.fieldName != null)
               Text(
                 widget.fieldName!,
-                style: TextStyle(fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF6C7278),
+                ),
               ),
 
-            if (widget.fieldName != null) SizedBox(height: 5),
+            if (widget.fieldName != null) SizedBox(height: 2),
             TextField(
               keyboardType: widget.keyboardType,
               focusNode: widget.focusNode,
