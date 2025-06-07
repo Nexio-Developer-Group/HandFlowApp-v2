@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:handflow/theme.dart';
 import '../components/title_subtitle_text.dart';
 import '../../components/scrolling_image_widget.dart';
 
@@ -15,10 +14,9 @@ class Authlayout extends StatefulWidget {
 class _AuthLayoutState extends State<Authlayout> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    // final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      body:
-      ScrollingBackground(
+      body: ScrollingBackground(
         background: const DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -31,7 +29,7 @@ class _AuthLayoutState extends State<Authlayout> {
         child: Column(
           children: [
             Flexible(
-              flex: 2,
+              flex: 1,
               child: Center(
                 child: Text(
                   'Handflow',
