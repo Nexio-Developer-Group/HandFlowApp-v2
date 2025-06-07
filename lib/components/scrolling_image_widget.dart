@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 class ScrollingBackground extends StatefulWidget {
   final Widget child;
+  final Widget background; // 👈 New field for external background
 
-  const ScrollingBackground({super.key, required this.child});
+  const ScrollingBackground({
+    super.key,
+    required this.child,
+    required this.background,
+  });
 
   @override
   State<ScrollingBackground> createState() => _ScrollingBackgroundState();
@@ -19,11 +24,31 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
 
   final double tileWidth = 356;
   final double tileHeight = 191;
+  final double spacing = 6.0;
+  final double scale = 0.8;
+  final double speed = 0.02;
+
+  ui.Image? _image;
 
   @override
   void initState() {
     super.initState();
+    _loadImage();
     _ticker = createTicker(_onTick)..start();
+  }
+
+  void _loadImage() {
+    final imageProvider = AssetImage('assets/background.png');
+    final config = ImageConfiguration();
+    final stream = imageProvider.resolve(config);
+
+    stream.addListener(
+      ImageStreamListener((imageInfo, _) {
+        setState(() {
+          _image = imageInfo.image;
+        });
+      }),
+    );
   }
 
   void _onTick(Duration elapsed) {
@@ -31,10 +56,7 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
     _lastElapsed = elapsed;
 
     setState(() {
-      _offset -= dt.inMilliseconds * 0.02; // Speed multiplier
-      if (_offset <= -tileHeight) {
-        _offset += tileHeight;
-      }
+      _offset += dt.inMilliseconds * speed;
     });
   }
 
@@ -46,55 +68,81 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final cols = (size.width / tileWidth).ceil() + 1;
-    final rows = (size.height / tileHeight).ceil() + 2;
-
     return Stack(
       fit: StackFit.expand,
       children: [
-        // 1️⃣ Gradient at bottom
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFE96A32), Color(0xFFF13B09)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+        // 1️⃣ Background passed from outside
+        widget.background,
+
+        // 2️⃣ Scrolling image layer
+        if (_image != null)
+          CustomPaint(
+            size: MediaQuery.of(context).size,
+            painter: _BackgroundPainter(
+              image: _image!,
+              offset: _offset,
+              tileWidth: tileWidth,
+              tileHeight: tileHeight,
+              spacing: spacing,
+              scale: scale,
+              opacity: 0.18,
             ),
           ),
-        ),
 
-        // 2️⃣ Scrolling images above gradient
-        Positioned(
-          top: _offset,
-          left: 0,
-          child: Column(
-            children: List.generate(rows, (row) {
-              return Row(
-                children: List.generate(cols, (col) {
-                  return Padding(
-                    padding: const EdgeInsets.all(
-                      6.0,
-                    ), // 👈 control the gap here
-                    child: Opacity(
-                      opacity: 0.18,
-                      child: Image.asset(
-                        'assets/background.png',
-                        width: tileWidth,
-                        height: tileHeight,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                }),
-              );
-            }),
-          ),
-        ),
-
-        // 3️⃣ Foreground UI (child widget)
+        // 3️⃣ Foreground widget
         widget.child,
       ],
     );
   }
+}
+
+class _BackgroundPainter extends CustomPainter {
+  final ui.Image image;
+  final double offset;
+  final double tileWidth;
+  final double tileHeight;
+  final double spacing;
+  final double scale;
+  final double opacity;
+
+  _BackgroundPainter({
+    required this.image,
+    required this.offset,
+    required this.tileWidth,
+    required this.tileHeight,
+    required this.spacing,
+    required this.scale,
+    required this.opacity,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.white.withOpacity(opacity);
+    final scaledW = tileWidth * scale;
+    final scaledH = tileHeight * scale;
+    final dx = scaledW + spacing;
+    final dy = scaledH + spacing;
+
+    final rows = (size.height / dy).ceil() + 2;
+    final cols = (size.width / dx).ceil() + 1;
+
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        final dxPos = col * dx;
+        final dyPos = (row * dy - (offset % dy));
+        canvas.drawImageRect(
+          image,
+          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+          Rect.fromLTWH(dxPos, dyPos, scaledW, scaledH),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _BackgroundPainter oldDelegate) => true;
+
+  @override
+  bool shouldRebuildSemantics(covariant CustomPainter oldDelegate) => false;
 }
