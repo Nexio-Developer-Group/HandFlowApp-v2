@@ -10,5 +10,17 @@
     "test@example.com": {
         "password": "password123",
         "onboarding_completed": true
+    },
+    "test1@gmail.com": {
+        "password": "12345678",
+        "onboarding_completed": false
+    },
+    "admin1@gmail.com": {
+        "password": "12345678",
+        "onboarding_completed": false
+    },
+    "abc@gmail.com": {
+        "password": "12345678",
+        "onboarding_completed": false
     }
 }
