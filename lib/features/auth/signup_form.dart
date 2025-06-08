@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../data_models/input_field_state.dart';
 import '../../services/auth_service.dart' as auth;
 import '../../components/auth_dual_button.dart';
+import '../../components/gradient_elevated_button.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -185,7 +186,7 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
           ],
         ),
 
-        ElevatedButton(
+        GradientElevatedButton(
           onPressed: _onSignupPressed,
           child: const Text("Sign Up"),
         ),

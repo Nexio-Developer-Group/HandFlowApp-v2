@@ -8,6 +8,7 @@ import '../../components/clickable_text.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart' as auth;
 import '../../components/auth_dual_button.dart';
+import '../../components/gradient_elevated_button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -206,7 +207,10 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
           ],
         ),
 
-        ElevatedButton(onPressed: _onLoginPressed, child: Text("Log In")),
+        GradientElevatedButton(
+          onPressed: _onLoginPressed,
+          child: const Text("Log In"),
+        ),
       ],
     );
   }

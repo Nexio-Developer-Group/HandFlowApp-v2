@@ -17,6 +17,7 @@ class AuthDualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double buttonHeight = MediaQuery.of(context).size.height * 36 / 650;
+    const customGrey = Color(0xFFF5F6F9);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -28,18 +29,13 @@ class AuthDualButton extends StatelessWidget {
               child: Text("Log In"),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(
-                  currentPath == '/login'
-                      ? Colors.transparent
-                      : Colors.grey[300],
+                  currentPath == '/login' ? Colors.transparent : customGrey,
                 ),
                 side: WidgetStateProperty.all(
-                  BorderSide(color: Colors.grey[300]!, width: 2),
+                  BorderSide(color: customGrey, width: 2),
                 ),
                 foregroundColor: WidgetStateProperty.all(
                   currentPath == '/login' ? Colors.black : orange,
-                ),
-                textStyle: WidgetStateProperty.all(
-                  TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
@@ -61,18 +57,13 @@ class AuthDualButton extends StatelessWidget {
               child: Text("Sign Up"),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(
-                  currentPath == '/signup'
-                      ? Colors.transparent
-                      : Colors.grey[300],
+                  currentPath == '/signup' ? Colors.transparent : customGrey,
                 ),
                 side: WidgetStateProperty.all(
-                  BorderSide(color: Colors.grey[300]!, width: 2),
+                  BorderSide(color: customGrey, width: 2),
                 ),
                 foregroundColor: WidgetStateProperty.all(
                   currentPath == '/signup' ? Colors.black : orange,
-                ),
-                textStyle: WidgetStateProperty.all(
-                  TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(

@@ -53,19 +53,17 @@ ThemeData appTheme = ThemeData(
   // ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      minimumSize: WidgetStatePropertyAll<Size>(
-        const Size.fromHeight(50), // height: 50, width: double.infinity (auto)
-      ),
+      minimumSize: WidgetStatePropertyAll<Size>(const Size.fromHeight(50)),
       maximumSize: WidgetStatePropertyAll<Size>(
         const Size(double.infinity, double.infinity),
       ),
       shape: WidgetStatePropertyAll<OutlinedBorder>(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Optional
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       alignment: Alignment.center,
-      // The rest of your visual style:
-      backgroundColor: WidgetStatePropertyAll(orange),
+      // Set solid background color to #F13B09
+      backgroundColor: WidgetStatePropertyAll(Color(0xFFF13B09)),
       foregroundColor: WidgetStatePropertyAll(Colors.white),
       elevation: WidgetStatePropertyAll(0),
       splashFactory: NoSplash.splashFactory,
@@ -73,6 +71,14 @@ ThemeData appTheme = ThemeData(
       shadowColor: WidgetStatePropertyAll(Colors.transparent),
       surfaceTintColor: WidgetStatePropertyAll(Colors.transparent),
       animationDuration: Duration.zero,
+      textStyle: WidgetStatePropertyAll(
+        TextStyle(
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w500, // Medium
+          fontSize: 14,
+          color: Colors.white,
+        ),
+      ),
     ),
   ),
 

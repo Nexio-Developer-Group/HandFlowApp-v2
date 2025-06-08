@@ -14,21 +14,29 @@ class TitleSubtitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 8),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
+          style: const TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w500, // Medium
+            fontSize: 32,
             color: Colors.black,
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 8),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 15, color: Colors.black54),
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400, // Regular
+            fontSize: 12,
+            color: Color(0xFF6C7278),
+          ),
           textAlign: TextAlign.center,
         ),
+        SizedBox(height: 8),
       ],
     );
   }

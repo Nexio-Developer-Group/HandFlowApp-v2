@@ -43,12 +43,12 @@ class _AuthLayoutState extends State<Authlayout> {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   Positioned(
-                    top: -MediaQuery.of(context).size.height * (14 / 650),
+                    top: -14,
                     left: 0,
                     right: 0,
                     child: Center(
@@ -56,7 +56,7 @@ class _AuthLayoutState extends State<Authlayout> {
                         width: MediaQuery.of(context).size.width * 0.84,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(178),
+                          color: Colors.white.withAlpha(112),
                           borderRadius: BorderRadius.circular(45),
                           boxShadow: [
                             BoxShadow(
@@ -85,9 +85,8 @@ class _AuthLayoutState extends State<Authlayout> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).size.height * 0.037,
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.037,
                             ),
                             child: const TitleSubtitleText(
                               title: 'Get Started now',
@@ -95,6 +94,8 @@ class _AuthLayoutState extends State<Authlayout> {
                                   'Create an account or log in to explore\nabout our app',
                             ),
                           ),
+                          SizedBox(height: 16),
+
                           // Use KeyedSubtree for persistence
                           Expanded(
                             child: KeyedSubtree(
