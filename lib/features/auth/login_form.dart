@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/theme.dart';
+import '../../components/custom_checkbox.dart';
 import '../../data_models/input_field_state.dart';
 import '../../components/password_field.dart';
-// import '../components/shaking_animation.dart';
 import '../../components/text_field.dart';
 import '../../components/clickable_text.dart';
 import 'package:go_router/go_router.dart';
@@ -52,18 +52,13 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
     }
 
     // Only call API if all required fields are filled
-    final result = await auth.login(username, password);
+    final result = await auth.login(username, password, rememberMe: rememberMe);
     final int statusCode = result['statusCode'];
     final String message = result['message'] ?? '';
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     if (statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Center(child: Text(message)),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (mounted) context.go('/home');
     } else {
       if (statusCode == 404) {
         setState(() {
@@ -149,53 +144,40 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          // margin: EdgeInsets.all(3.96),
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Transform.scale(
-                              scale: 0.8, // Increase size by 1.5x
-                              child: Checkbox(
-                                value: rememberMe,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    rememberMe = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        ClickableText(
-                          text: "Remember me",
-                          onTap: () {
-                            setState(() {
-                              rememberMe = !rememberMe;
-                            });
-                          },
-                          underline: false,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                            color: Color(0xFF6C7278),
-                          ),
-                        ),
-                      ],
+                    Container(
+                      margin: const EdgeInsets.all(3.96),
+                      child: CustomCheckbox(
+                        value: rememberMe,
+                        onChanged: (val) => setState(() => rememberMe = val),
+                        size: 18,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ClickableText(
+                      text: "Remember me",
+                      onTap: () {
+                        setState(() {
+                          rememberMe = !rememberMe;
+                        });
+                      },
+                      underline: false,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                        color: Color(0xFF6C7278),
+                      ),
                     ),
                   ],
                 ),
                 ClickableText(
                   text: 'Forget Password ?',
                   onTap: () {
-                    null;
+                    print("jsfskjf");
+                    context.push('/forgot-password');
                   },
                   underline: false,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
@@ -206,7 +188,6 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
             ),
           ],
         ),
-
         GradientElevatedButton(
           onPressed: _onLoginPressed,
           child: const Text("Log In"),

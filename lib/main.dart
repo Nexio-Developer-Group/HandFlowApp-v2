@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'app_router.dart';
+import 'routing/app_router.dart';
 import 'theme.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

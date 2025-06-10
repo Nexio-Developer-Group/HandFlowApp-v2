@@ -92,7 +92,14 @@ ThemeData appTheme = ThemeData(
   ),
 
   checkboxTheme: CheckboxThemeData(
-    side: BorderSide(color: Colors.black87, width: 2),
-    checkColor: WidgetStatePropertyAll(orange),
+    side: BorderSide(color: Colors.black87, width: 2), // visible border
+    checkColor: WidgetStatePropertyAll(Colors.white), // tick color (foreground)
+    fillColor: WidgetStatePropertyAll(Colors.white), // background of box
+    overlayColor: WidgetStatePropertyAll(
+      Color(0x1AF13B09),
+    ), // subtle orange overlay on press (optional)
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    // The activeColor is the border color when checked, but we want border to stay black, so leave as default
+    // We'll set the tick color in the Checkbox widget directly for orange
   ),
 );
