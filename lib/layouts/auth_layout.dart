@@ -14,7 +14,26 @@ class Authlayout extends StatefulWidget {
 class _AuthLayoutState extends State<Authlayout> {
   @override
   Widget build(BuildContext context) {
-    // final screenSize = MediaQuery.of(context).size;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive breakpoints
+    double headerFraction;
+    double contentFraction;
+
+    if (screenHeight < 800) {
+      // Small devices
+      headerFraction = 0.20;
+      contentFraction = 0.80;
+    } else if (screenHeight < 900) {
+      // Medium devices
+      headerFraction = 0.25;
+      contentFraction = 0.75;
+    } else {
+      // Large devices
+      headerFraction = 0.263;
+      contentFraction = 0.737;
+    }
+
     return Scaffold(
       body: ScrollingBackground(
         background: const DecoratedBox(
@@ -30,7 +49,7 @@ class _AuthLayoutState extends State<Authlayout> {
           child: Column(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: screenHeight * headerFraction,
                 child: Center(
                   child: Text(
                     'Handflow',
@@ -44,7 +63,7 @@ class _AuthLayoutState extends State<Authlayout> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: screenHeight * contentFraction,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -87,7 +106,7 @@ class _AuthLayoutState extends State<Authlayout> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.037,
+                                top: screenHeight * 0.037,
                               ),
                               child: const TitleSubtitleText(
                                 title: 'Get Started now',
@@ -106,8 +125,7 @@ class _AuthLayoutState extends State<Authlayout> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.032,
+                                vertical: screenHeight * 0.032,
                               ),
                               child: Image.asset('assets/logo.png'),
                             ),
