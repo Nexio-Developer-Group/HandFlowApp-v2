@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../services/auth_service.dart';
+import '../../auth/data/session_storage.dart';
 
 /// Checks for user info in SharedPreferences or in-memory session
 Future<bool> isLoggedIn() async {
-  final prefs = await SharedPreferences.getInstance();
-  final email = prefs.getString('email');
-  final accessToken = prefs.getString('access_token');
-  if (email != null && accessToken != null) {
+  if (Session().isNotEmpty) {
     return true;
   }
-  // Check in-memory session as fallback
-  final session = Session();
-  return session.email != null && session.accessToken != null;
+  return false;
 }
 
 /// GoRouter redirect logic for auth

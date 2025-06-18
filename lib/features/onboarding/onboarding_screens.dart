@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
-import 'package:handflow/theme.dart';
+import 'package:handflow/shared/theme.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';

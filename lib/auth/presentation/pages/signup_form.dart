@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:handflow/theme.dart';
-import '../../components/password_field.dart';
-import '../../components/text_field.dart';
+import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
-// import '../../components/clickable_text.dart';
-import '../../data_models/input_field_state.dart';
-import '../../services/auth_service.dart' as auth;
-import '../../components/auth_dual_button.dart';
-import '../../components/gradient_elevated_button.dart';
+import '../components/password_field.dart';
+import '../components/text_field.dart';
+import '../../model/input_field_state.dart';
+import '../../data/auth_service.dart' as auth;
+import '../components/auth_dual_button.dart';
+import '../../../shared/widgets/gradient_elevated_button.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -98,6 +97,7 @@ class _SignupFormState extends State<SignupForm> with WidgetsBindingObserver {
       final loginResult = await auth.login(
         inputFields["email"]!.text,
         inputFields["password"]!.text,
+        false,
       );
       print(
         "loginResult: $loginResult ******************************************",

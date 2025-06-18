@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'routing/app_router.dart';
-import 'theme.dart';
+import 'shared/router/app_router.dart';
+import 'shared/theme.dart';
 import 'package:flutter/services.dart';
 
 void main() {

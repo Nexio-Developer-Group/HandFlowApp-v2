@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:handflow/theme.dart';
-import '../../components/custom_checkbox.dart';
-import '../../data_models/input_field_state.dart';
-import '../../components/password_field.dart';
-import '../../components/text_field.dart';
-import '../../components/clickable_text.dart';
+import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
-import '../../services/auth_service.dart' as auth;
-import '../../components/auth_dual_button.dart';
-import '../../components/gradient_elevated_button.dart';
+import '../../../shared/widgets/custom_checkbox.dart';
+import '../../model/input_field_state.dart';
+import '../components/password_field.dart';
+import '../components/text_field.dart';
+import '../components/clickable_text.dart';
+import '../../data/auth_service.dart' as auth;
+import '../components/auth_dual_button.dart';
+import '../../../shared/widgets/gradient_elevated_button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -52,7 +52,7 @@ class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
     }
 
     // Only call API if all required fields are filled
-    final result = await auth.login(username, password, rememberMe: rememberMe);
+    final result = await auth.login(username, password, rememberMe);
     final int statusCode = result['statusCode'];
     final String message = result['message'] ?? '';
 
