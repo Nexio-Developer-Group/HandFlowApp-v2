@@ -24,7 +24,7 @@ class _AuthLayoutState extends State<Authlayout> {
       final signupState = Provider.of<SignupFormState>(context, listen: false);
       signupState.monitorKeyboardFocus();
       _initialized = true;
-    print("()" * 50);
+      print("()" * 50);
     }
   }
 
@@ -56,8 +56,8 @@ class _AuthLayoutState extends State<Authlayout> {
       headerFraction = 0.263;
       contentFraction = 0.737;
     }
-    // print(isKeyboardOpen);
-    // print("*" * 100);
+
+    // Removed PopScope, just use GestureDetector for unfocus on tap
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => FocusScope.of(context).unfocus(),

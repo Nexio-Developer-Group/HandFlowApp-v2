@@ -38,97 +38,104 @@ class SignupForm extends StatelessWidget {
             signupState.resetNavigationFlag();
           });
         }
-        return Column(
-          mainAxisAlignment:
-              !ctx.watch<SignupFormState>().isKeyboardOpen
-                  ? MainAxisAlignment.spaceBetween
-                  : MainAxisAlignment.spaceEvenly,
-          children: [
-            if (!ctx.watch<SignupFormState>().isKeyboardOpen)
-              AuthDualButton(
-                currentPath: uri.path,
-                orange: orange,
-                onLogin: () => context.go('/login'),
-                onSignup: () => context.go('/signup'),
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Column(
+            mainAxisAlignment:
+                !ctx.watch<SignupFormState>().isKeyboardOpen
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.spaceEvenly,
+            children: [
+              if (!ctx.watch<SignupFormState>().isKeyboardOpen)
+                AuthDualButton(
+                  currentPath: uri.path,
+                  orange: orange,
+                  onLogin: () => context.go('/login'),
+                  onSignup: () => context.go('/signup'),
+                ),
+              Column(
+                children: [
+                  CustomTextField(
+                    fieldName: "Email",
+                    controller: signupState.email.controller,
+                    focusNode: signupState.email.focusNode,
+                    hintText: "Email",
+                    required: true,
+                    isTextErrored: signupState.email.isErrored,
+                    isShaking: signupState.email.isShaking,
+                    keyboardType: TextInputType.emailAddress,
+                    errorMessage: signupState.email.errorMessage,
+                    onChanged: (_) {
+                      signupState.updateField(
+                        "email",
+                        signupState.email.copyWith(
+                          isErrored: false,
+                          isShaking: false,
+                        ),
+                      );
+                      null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  PasswordField(
+                    fieldName: "Password",
+                    controller: signupState.password.controller,
+                    hintText: "Password",
+                    isPasswordErrored: signupState.password.isErrored,
+                    isShaking: signupState.password.isShaking,
+                    focusNode: signupState.password.focusNode,
+                    keyboardType: TextInputType.text,
+                    errorMessage: signupState.password.errorMessage,
+                    onChanged: (_) {
+                      signupState.updateField(
+                        "password",
+                        signupState.password.copyWith(
+                          isErrored: false,
+                          isShaking: false,
+                        ),
+                      );
+                      null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  PasswordField(
+                    fieldName: "Confirm Password",
+                    controller: signupState.confirmPassword.controller,
+                    hintText: "Confirm Password",
+                    isPasswordErrored: signupState.confirmPassword.isErrored,
+                    isShaking: signupState.confirmPassword.isShaking,
+                    focusNode: signupState.confirmPassword.focusNode,
+                    keyboardType: TextInputType.text,
+                    errorMessage: signupState.confirmPassword.errorMessage,
+                    onChanged: (_) {
+                      signupState.updateField(
+                        "confirmPassword",
+                        signupState.confirmPassword.copyWith(
+                          isErrored: false,
+                          isShaking: false,
+                        ),
+                      );
+                      null;
+                    },
+                  ),
+                ],
               ),
-            Column(
-              children: [
-                CustomTextField(
-                  fieldName: "Email",
-                  controller: signupState.email.controller,
-                  focusNode: signupState.email.focusNode,
-                  hintText: "Email",
-                  required: true,
-                  isTextErrored: signupState.email.isErrored,
-                  isShaking: signupState.email.isShaking,
-                  keyboardType: TextInputType.emailAddress,
-                  errorMessage: signupState.email.errorMessage,
-                  onChanged: (_) {
-                    signupState.updateField(
-                      "email",
-                      signupState.email.copyWith(
-                        isErrored: false,
-                        isShaking: false,
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                PasswordField(
-                  fieldName: "Password",
-                  controller: signupState.password.controller,
-                  hintText: "Password",
-                  isPasswordErrored: signupState.password.isErrored,
-                  isShaking: signupState.password.isShaking,
-                  focusNode: signupState.password.focusNode,
-                  keyboardType: TextInputType.text,
-                  errorMessage: signupState.password.errorMessage,
-                  onChanged: (_) {
-                    signupState.updateField(
-                      "password",
-                      signupState.password.copyWith(
-                        isErrored: false,
-                        isShaking: false,
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                PasswordField(
-                  fieldName: "Confirm Password",
-                  controller: signupState.confirmPassword.controller,
-                  hintText: "Confirm Password",
-                  isPasswordErrored: signupState.confirmPassword.isErrored,
-                  isShaking: signupState.confirmPassword.isShaking,
-                  focusNode: signupState.confirmPassword.focusNode,
-                  keyboardType: TextInputType.text,
-                  errorMessage: signupState.confirmPassword.errorMessage,
-                  onChanged: (_) {
-                    signupState.updateField(
-                      "confirmPassword",
-                      signupState.confirmPassword.copyWith(
-                        isErrored: false,
-                        isShaking: false,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
 
-            GradientElevatedButton(
-              onPressed:
-                  signupState.isLoading
-                      ? null
-                      : () {
-                        controller.signup();
-                      },
-              child:
-                  signupState.isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text("Sign Up"),
-            ),
-          ],
+              GradientElevatedButton(
+                onPressed:
+                    signupState.isLoading
+                        ? null
+                        : () {
+                          controller.signup();
+                        },
+                child:
+                    signupState.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text("Sign Up"),
+              ),
+            ],
+          ),
         );
       },
     );

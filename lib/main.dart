@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        // FocusManager.instance.primaryFocus?.unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MaterialApp.router(routerConfig: appRouter, theme: appTheme),
     );

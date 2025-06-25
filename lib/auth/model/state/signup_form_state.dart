@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/foundation.dart';
 import '../input_field_state.dart';
 
-class SignupFormState extends ChangeNotifier {
+class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   bool _isKeyboardOpen = false;
   bool _isLoading = false;
-
-  // SignupFormState() {
-  //   monitorKeyboardFocus();
-  //   print(_isKeyboardOpen);
-  //   print("*" * 10);
-  // }
+  double _lastViewInsets = 0.0;
 
   final Map<String, FieldState> _inputFields = {
     "email": FieldState(),
@@ -84,34 +79,30 @@ class SignupFormState extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isListening = false; // Add this field to prevent multiple listeners
+  bool _isListening = false;
 
   void monitorKeyboardFocus() {
     if (_isListening) return;
     _isListening = true;
-
-    // Add listener once
-    FocusManager.instance.addListener(_handleFocusChange);
+    WidgetsBinding.instance.addObserver(this);
+    // You can still listen to focus if you want, but don't use it for keyboard state
+    // FocusManager.instance.addListener(_handleFocusChange);
   }
 
-  void _handleFocusChange() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Only consider keyboard open if one of our input fields is focused
-      final currentFocus = FocusManager.instance.primaryFocus;
-      final isSignupFieldFocused =
-          currentFocus == email.focusNode ||
-          currentFocus == password.focusNode ||
-          currentFocus == confirmPassword.focusNode;
-      if (isSignupFieldFocused != _isKeyboardOpen) {
-        _isKeyboardOpen = isSignupFieldFocused;
-        notifyListeners();
-      }
-    });
+  @override
+  void didChangeMetrics() {
+    final viewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
+    final isKeyboardNowOpen = viewInsets > 0.0;
+    if (isKeyboardNowOpen != _isKeyboardOpen) {
+      _isKeyboardOpen = isKeyboardNowOpen;
+      notifyListeners();
+    }
   }
 
   @override
   void dispose() {
-    FocusManager.instance.removeListener(_handleFocusChange);
+    // FocusManager.instance.removeListener(_handleFocusChange);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }

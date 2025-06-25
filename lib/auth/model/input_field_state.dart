@@ -9,11 +9,13 @@ class FieldState {
 
   FieldState({
     String? initialValue,
+    TextEditingController? controller,
+    FocusNode? focusNode,
     this.isErrored = false,
     this.errorMessage,
     this.isShaking = false,
-  }) : controller = TextEditingController(text: initialValue),
-       focusNode = FocusNode();
+  }) : controller = controller ?? TextEditingController(text: initialValue),
+       focusNode = focusNode ?? FocusNode();
 
   /// Getter to easily access the current text value
   String get text => controller.text;
@@ -23,18 +25,28 @@ class FieldState {
     bool? isErrored,
     String? errorMessage,
     bool? isShaking,
-    String? text, // if you want to change controller text
+    String? text,
   }) {
     if (text != null && text != controller.text) {
       controller.text = text;
     }
-    return FieldState(
-      initialValue: controller.text,
+    return FieldState._internal(
+      controller: controller,
+      focusNode: focusNode,
       isErrored: isErrored ?? this.isErrored,
       errorMessage: errorMessage ?? this.errorMessage,
       isShaking: isShaking ?? this.isShaking,
     );
   }
+
+  /// Private named constructor for internal use
+  FieldState._internal({
+    required this.controller,
+    required this.focusNode,
+    required this.isErrored,
+    required this.errorMessage,
+    required this.isShaking,
+  });
 
   void setError(String? message) {
     isErrored = true;

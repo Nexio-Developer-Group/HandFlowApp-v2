@@ -62,44 +62,33 @@ class _PasswordFieldState extends State<PasswordField> {
               ),
             ),
           if (widget.fieldName != null) const SizedBox(height: 2),
-
-          Focus(
-            onFocusChange: (hasFocus) {
-              final signupState = context.read<SignupFormState>();
-              // Only update if the value is actually changing
-              if (hasFocus && !signupState.isKeyboardOpen) {
-                signupState.openKeyboard();
-              }
-            },
-
-            child: TextField(
-              controller: widget.controller,
-              focusNode: widget.focusNode,
-              obscureText: _obscureText,
-              keyboardType: widget.keyboardType,
-              onChanged: widget.onChanged,
-              decoration: InputDecoration(
-                hintText: widget.hintText ?? '',
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: colorScheme.onSurface.withOpacity(0.6),
-                  ),
-                  onPressed: _toggleVisibility,
+          TextField(
+            controller: widget.controller,
+            focusNode: widget.focusNode,
+            obscureText: _obscureText,
+            keyboardType: widget.keyboardType,
+            onChanged: widget.onChanged,
+            decoration: InputDecoration(
+              hintText: widget.hintText ?? '',
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
-                enabledBorder:
-                    widget.isPasswordErrored
-                        ? inputTheme.errorBorder
-                        : inputTheme.enabledBorder,
-                focusedBorder:
-                    widget.isPasswordErrored
-                        ? inputTheme.focusedErrorBorder
-                        : inputTheme.focusedBorder,
-                errorText: null,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12.5,
-                  horizontal: 14,
-                ),
+                onPressed: _toggleVisibility,
+              ),
+              enabledBorder:
+                  widget.isPasswordErrored
+                      ? inputTheme.errorBorder
+                      : inputTheme.enabledBorder,
+              focusedBorder:
+                  widget.isPasswordErrored
+                      ? inputTheme.focusedErrorBorder
+                      : inputTheme.focusedBorder,
+              errorText: null,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12.5,
+                horizontal: 14,
               ),
             ),
           ),

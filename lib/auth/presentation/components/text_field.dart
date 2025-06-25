@@ -240,36 +240,24 @@ class CustomTextField extends StatelessWidget {
           ),
           const SizedBox(height: 2),
 
-          // Focus-aware wrapper
-          Focus(
-            // focusNode: focusNode,
-            onFocusChange: (hasFocus) {
-              final signupState = context.read<SignupFormState>();
-              // Only update if the value is actually changing
-              if (hasFocus && !signupState.isKeyboardOpen) {
-                signupState.openKeyboard();
-              }
-            },
-
-            child: TextField(
-              controller: controller,
-              focusNode: focusNode,
-              keyboardType: keyboardType,
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                hintText: hintText ?? '',
-                enabledBorder:
-                    isTextErrored
-                        ? inputTheme.errorBorder
-                        : inputTheme.enabledBorder,
-                focusedBorder:
-                    isTextErrored
-                        ? inputTheme.focusedErrorBorder
-                        : inputTheme.focusedBorder,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12.5,
-                  horizontal: 14,
-                ),
+          TextField(
+            controller: controller,
+            focusNode: focusNode,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              hintText: hintText ?? '',
+              enabledBorder:
+                  isTextErrored
+                      ? inputTheme.errorBorder
+                      : inputTheme.enabledBorder,
+              focusedBorder:
+                  isTextErrored
+                      ? inputTheme.focusedErrorBorder
+                      : inputTheme.focusedBorder,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12.5,
+                horizontal: 14,
               ),
             ),
           ),

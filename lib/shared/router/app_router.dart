@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../../auth/model/state/signup_form_state.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/signup',
   redirect: (context, state) async => await authGuard(context, state),
   routes: [
     GoRoute(path: '/home', builder: (context, state) => const HomePage()),
