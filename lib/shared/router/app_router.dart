@@ -6,6 +6,8 @@ import '../../features/onboarding/onboarding_screens.dart';
 import '../../features/home.dart';
 import 'auth_guard.dart';
 import '../../auth/presentation/pages/forgot_password.dart';
+import 'package:provider/provider.dart';
+import '../../auth/model/state/signup_form_state.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
@@ -17,7 +19,14 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => OnboardingScreen(),
     ),
     ShellRoute(
-      builder: (context, state, child) => Authlayout(child: child),
+      builder:
+          (context, state, child) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => SignupFormState()),
+              // ChangeNotifierProvider(create: (_) => LoginFormState()),
+            ],
+            child: Authlayout(child: child),
+          ),
       routes: [
         GoRoute(
           path: '/login',

@@ -28,6 +28,9 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
   final double scale = 0.8;
   final double speed = 0.02;
 
+  ImageStream? _imageStream;
+  ImageStreamListener? _imageListener;
+
   ui.Image? _image;
 
   @override
@@ -40,21 +43,21 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
   void _loadImage() {
     final imageProvider = AssetImage('assets/background.png');
     final config = ImageConfiguration();
-    final stream = imageProvider.resolve(config);
-
-    stream.addListener(
-      ImageStreamListener((imageInfo, _) {
-        setState(() {
-          _image = imageInfo.image;
-        });
-      }),
-    );
+    _imageStream = imageProvider.resolve(config);
+    _imageListener = ImageStreamListener((imageInfo, _) {
+      if (!mounted) return;
+      setState(() {
+        _image = imageInfo.image;
+      });
+    });
+    _imageStream!.addListener(_imageListener!);
   }
 
   void _onTick(Duration elapsed) {
     final dt = elapsed - _lastElapsed;
     _lastElapsed = elapsed;
 
+    if (!mounted) return;
     setState(() {
       _offset += dt.inMilliseconds * speed;
     });
@@ -64,6 +67,9 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
   void dispose() {
     _ticker.dispose();
     super.dispose();
+    if (_imageStream != null && _imageListener != null) {
+      _imageStream!.removeListener(_imageListener!);
+    }
   }
 
   @override

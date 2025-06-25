@@ -18,6 +18,24 @@ class FieldState {
   /// Getter to easily access the current text value
   String get text => controller.text;
 
+  /// Clone this FieldState with new values
+  FieldState copyWith({
+    bool? isErrored,
+    String? errorMessage,
+    bool? isShaking,
+    String? text, // if you want to change controller text
+  }) {
+    if (text != null && text != controller.text) {
+      controller.text = text;
+    }
+    return FieldState(
+      initialValue: controller.text,
+      isErrored: isErrored ?? this.isErrored,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isShaking: isShaking ?? this.isShaking,
+    );
+  }
+
   void setError(String? message) {
     isErrored = true;
     errorMessage = message;

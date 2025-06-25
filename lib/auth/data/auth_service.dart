@@ -113,3 +113,4 @@ Future<void> logout() async {
   // Clear in-memory session as well
   Session().clear();
 }
+
