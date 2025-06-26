@@ -8,6 +8,7 @@ import 'auth_guard.dart';
 import '../../auth/presentation/pages/forgot_password.dart';
 import 'package:provider/provider.dart';
 import '../../auth/application/signup/signup_form_state.dart';
+import '../../auth/application/login/login_form_state.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/signup',
@@ -23,7 +24,7 @@ final GoRouter appRouter = GoRouter(
           (context, state, child) => MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (_) => SignupFormState()),
-              // ChangeNotifierProvider(create: (_) => LoginFormState()),
+              ChangeNotifierProvider(create: (_) => LoginFormState()),
             ],
             child: Authlayout(child: child),
           ),

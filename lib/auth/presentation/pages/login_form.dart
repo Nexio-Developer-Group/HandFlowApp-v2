@@ -1,198 +1,160 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../shared/widgets/custom_checkbox.dart';
-import '../../model/input_field_state.dart';
 import '../components/password_field.dart';
 import '../components/text_field.dart';
 import '../components/clickable_text.dart';
-import '../../data/auth_service.dart' as auth;
+import '../../application/login/login_form_state.dart';
+import '../../application/login/login_controller.dart';
 import '../components/auth_dual_button.dart';
 import '../../../shared/widgets/gradient_elevated_button.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
   @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> with WidgetsBindingObserver {
-  Map<String, FieldState> inputFields = {
-    "username": FieldState(),
-    "password": FieldState(),
-  };
-  bool rememberMe = false;
-
-  void _onLoginPressed() async {
-    String username = inputFields["username"]!.text;
-    String password = inputFields["password"]!.text;
-
-    // First, check for empty required fields
-    bool hasEmpty = false;
-    if (username == "") {
-      setState(() {
-        inputFields["username"]!.isErrored = true;
-        inputFields["username"]!.isShaking = true;
-      });
-      hasEmpty = true;
-    }
-    if (password == "") {
-      setState(() {
-        inputFields["password"]!.isErrored = true;
-        inputFields["password"]!.isShaking = true;
-      });
-      hasEmpty = true;
-    }
-    if (hasEmpty) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("All fields are required.")));
-      return;
-    }
-
-    // Only call API if all required fields are filled
-    final result = await auth.login(username, password, rememberMe);
-    final int statusCode = result['statusCode'];
-    final String message = result['message'] ?? '';
-
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    if (statusCode == 200) {
-      if (mounted) context.go('/home');
-    } else {
-      if (statusCode == 404) {
-        setState(() {
-          inputFields["username"]!.isErrored = true;
-          inputFields["username"]!.isShaking = true;
-        });
-      } else if (statusCode == 401) {
-        setState(() {
-          inputFields["password"]!.isErrored = true;
-          inputFields["password"]!.isShaking = true;
-        });
-      }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-      if (statusCode == 404) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          setState(() {
-            inputFields["username"]!.isShaking = false;
-          });
-        });
-      } else if (statusCode == 401) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          setState(() {
-            inputFields["password"]!.isShaking = false;
-          });
-        });
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    for (final field in inputFields.values) {
-      field.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // TextTheme textTheme = TextTheme.of(context);
     final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AuthDualButton(
-          currentPath: uri.path,
-          orange: orange,
-          onLogin: () => context.go('/login'),
-          onSignup: () => context.go('/signup'),
-        ),
-        Column(
-          children: [
-            CustomTextField(
-              fieldName: 'Email',
-              controller: inputFields["username"]!.controller,
-              hintText: "Enter Email",
-              required: true,
-              isTextErrored: inputFields["username"]!.isErrored,
-              keyboardType: TextInputType.emailAddress,
-              isShaking: inputFields["username"]!.isShaking,
-              errorMessage: inputFields["username"]!.errorMessage,
-              focusNode: inputFields["username"]!.focusNode,
-            ),
-            SizedBox(height: 16),
-            PasswordField(
-              fieldName: 'Password',
-              controller: inputFields["password"]!.controller,
-              hintText: "password",
-              isPasswordErrored: inputFields["password"]!.isErrored,
-              keyboardType: TextInputType.text,
-              isShaking: inputFields["password"]!.isShaking,
-              errorMessage: inputFields["password"]!.errorMessage,
-              focusNode: inputFields["password"]!.focusNode,
-            ),
-            SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(3.96),
-                      child: CustomCheckbox(
-                        value: rememberMe,
-                        onChanged: (val) => setState(() => rememberMe = val),
-                        size: 18,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    ClickableText(
-                      text: "Remember me",
-                      onTap: () {
-                        setState(() {
-                          rememberMe = !rememberMe;
-                        });
-                      },
-                      underline: false,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color(0xFF6C7278),
-                      ),
-                    ),
-                  ],
+    return Consumer<LoginFormState>(
+      builder: (ctx, loginState, _) {
+        final controller = LoginController(loginState);
+        if (loginState.snackbarMessage != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(loginState.snackbarMessage!)),
+            );
+            loginState.clearSnackbarMessage();
+          });
+        }
+
+        // ✅ Navigate on success
+        if (loginState.successNavigate) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.go('/home');
+            loginState.resetNavigationFlag();
+          });
+        }
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Column(
+            mainAxisAlignment:
+                !ctx.watch<LoginFormState>().isKeyboardOpen
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.spaceEvenly,
+            children: [
+              if (!ctx.watch<LoginFormState>().isKeyboardOpen)
+                AuthDualButton(
+                  currentPath: uri.path,
+                  orange: orange,
+                  onLogin: () => context.go('/login'),
+                  onSignup: () => context.go('/signup'),
                 ),
-                ClickableText(
-                  text: 'Forget Password ?',
-                  onTap: () {
-                    print("jsfskjf");
-                    context.push('/forgot-password');
-                  },
-                  underline: false,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: Color(0xFFE96A32),
+              Column(
+                children: [
+                  CustomTextField(
+                    fieldName: 'Email',
+                    controller: loginState.email.controller,
+                    hintText: "Enter Email",
+                    required: true,
+                    isTextErrored: loginState.email.isErrored,
+                    keyboardType: TextInputType.emailAddress,
+                    isShaking: loginState.email.isShaking,
+                    errorMessage: loginState.email.errorMessage,
+                    focusNode: loginState.email.focusNode,
+                    onChanged: (_) {
+                      loginState.updateField(
+                        "username",
+                        loginState.email.copyWith(
+                          isErrored: false,
+                          isShaking: false,
+                        ),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        GradientElevatedButton(
-          onPressed: _onLoginPressed,
-          child: const Text("Log In"),
-        ),
-      ],
+                  SizedBox(height: 16),
+                  PasswordField(
+                    fieldName: 'Password',
+                    controller: loginState.password.controller,
+                    hintText: "password",
+                    isPasswordErrored: loginState.password.isErrored,
+                    keyboardType: TextInputType.text,
+                    isShaking: loginState.password.isShaking,
+                    errorMessage: loginState.password.errorMessage,
+                    focusNode: loginState.password.focusNode,
+                    onChanged: (_) {
+                      loginState.updateField(
+                        "password",
+                        loginState.password.copyWith(
+                          isErrored: false,
+                          isShaking: false,
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(3.96),
+                            child: CustomCheckbox(
+                              value: loginState.rememberMe,
+                              onChanged: (val) => loginState.setRememberMe(val),
+                              size: 18,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          ClickableText(
+                            text: "Remember me",
+                            onTap: () {
+                              loginState.setRememberMe(!loginState.rememberMe);
+                            },
+                            underline: false,
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color(0xFF6C7278),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ClickableText(
+                        text: 'Forget Password ?',
+                        onTap: () {
+                          context.push('/forgot-password');
+                        },
+                        underline: false,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Color(0xFFE96A32),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              GradientElevatedButton(
+                onPressed:
+                    loginState.isLoading ? null : () => controller.login(),
+                child:
+                    loginState.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text("Log In"),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
