@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'shaking_animation.dart';
-import '../../model/state/signup_form_state.dart';
-import 'package:provider/provider.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController? controller;
@@ -73,7 +71,7 @@ class _PasswordFieldState extends State<PasswordField> {
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: colorScheme.onSurface.withOpacity(0.6),
+                  color: colorScheme.onSurface.withAlpha((0.6 * 255).toInt()),
                 ),
                 onPressed: _toggleVisibility,
               ),

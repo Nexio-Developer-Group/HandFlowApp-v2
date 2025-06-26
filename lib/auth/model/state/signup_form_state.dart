@@ -5,7 +5,6 @@ import '../input_field_state.dart';
 class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   bool _isKeyboardOpen = false;
   bool _isLoading = false;
-  double _lastViewInsets = 0.0;
 
   final Map<String, FieldState> _inputFields = {
     "email": FieldState(),
@@ -91,7 +90,14 @@ class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    final viewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
+    final viewInsets =
+        WidgetsBinding
+            .instance
+            .platformDispatcher
+            .views
+            .first
+            .viewInsets
+            .bottom;
     final isKeyboardNowOpen = viewInsets > 0.0;
     if (isKeyboardNowOpen != _isKeyboardOpen) {
       _isKeyboardOpen = isKeyboardNowOpen;
