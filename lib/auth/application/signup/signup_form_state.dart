@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/foundation.dart';
-import '../input_field_state.dart';
+import '../../model/input_field_state.dart';
 
 class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   bool _isKeyboardOpen = false;

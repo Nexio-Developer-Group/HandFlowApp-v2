@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/title_subtitle_text.dart';
-import '../widgets/scrolling_image_widget.dart';
-import '../../auth/model/state/signup_form_state.dart';
+import '../../../shared/widgets/title_subtitle_text.dart';
+import '../../../shared/widgets/scrolling_image_widget.dart';
+import '../../application/signup/signup_form_state.dart';
 import 'package:provider/provider.dart';
 
 class Authlayout extends StatefulWidget {

@@ -7,9 +7,9 @@ import '../components/text_field.dart';
 // import '../../data/auth_service.dart' as auth;
 import '../components/auth_dual_button.dart';
 import '../../../shared/widgets/gradient_elevated_button.dart';
-import '../../model/state/signup_controller.dart';
+import '../../application/signup/signup_controller.dart';
 // import 'package:flutter/foundation.dart';
-import '../../model/state/signup_form_state.dart';
+import '../../application/signup/signup_form_state.dart';
 import 'package:provider/provider.dart';
 
 class SignupForm extends StatelessWidget {

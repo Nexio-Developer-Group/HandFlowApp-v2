@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:handflow/shared/layouts/auth_layout.dart';
+import 'package:handflow/auth/presentation/pages/auth_layout.dart';
 import '../../auth/presentation/pages/login_form.dart';
 import '../../auth/presentation/pages/signup_form.dart';
 import '../../features/onboarding/onboarding_screens.dart';
@@ -7,7 +7,7 @@ import '../../features/home.dart';
 import 'auth_guard.dart';
 import '../../auth/presentation/pages/forgot_password.dart';
 import 'package:provider/provider.dart';
-import '../../auth/model/state/signup_form_state.dart';
+import '../../auth/application/signup/signup_form_state.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/signup',
