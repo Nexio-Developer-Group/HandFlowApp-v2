@@ -14,12 +14,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: MaterialApp.router(routerConfig: appRouter, theme: appTheme),
-    );
+    return MaterialApp.router(routerConfig: appRouter, theme: appTheme);
   }
 }

@@ -40,6 +40,9 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+      'PasswordField build: controller.hashCode=${widget.controller?.hashCode}, focusNode.hashCode=${widget.focusNode?.hashCode}',
+    );
     final theme = Theme.of(context);
     final inputTheme = theme.inputDecorationTheme;
     final colorScheme = theme.colorScheme;

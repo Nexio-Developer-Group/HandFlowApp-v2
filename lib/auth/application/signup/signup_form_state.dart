@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:handflow/auth/application/auth_layout_state.dart';
 // import 'package:flutter/foundation.dart';
 import '../../model/input_field_state.dart';
 
 class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   bool _isKeyboardOpen = false;
   bool _isLoading = false;
+  final AuthLayoutState authLayoutState;
+  SignupFormState({required this.authLayoutState});
 
   final Map<String, FieldState> _inputFields = {
     "email": FieldState(),
@@ -13,7 +16,7 @@ class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   };
 
   // Getters
-  bool get isKeyboardOpen => _isKeyboardOpen;
+  bool get isKeyboardOpen => authLayoutState.isKeyboardOpen;
   bool get isLoading => _isLoading;
 
   FieldState get email => _inputFields["email"]!;
@@ -76,39 +79,5 @@ class SignupFormState extends ChangeNotifier with WidgetsBindingObserver {
   void resetNavigationFlag() {
     _successNavigate = false;
     notifyListeners();
-  }
-
-  bool _isListening = false;
-
-  void monitorKeyboardFocus() {
-    if (_isListening) return;
-    _isListening = true;
-    WidgetsBinding.instance.addObserver(this);
-    // You can still listen to focus if you want, but don't use it for keyboard state
-    // FocusManager.instance.addListener(_handleFocusChange);
-  }
-
-  @override
-  void didChangeMetrics() {
-    final viewInsets =
-        WidgetsBinding
-            .instance
-            .platformDispatcher
-            .views
-            .first
-            .viewInsets
-            .bottom;
-    final isKeyboardNowOpen = viewInsets > 0.0;
-    if (isKeyboardNowOpen != _isKeyboardOpen) {
-      _isKeyboardOpen = isKeyboardNowOpen;
-      notifyListeners();
-    }
-  }
-
-  @override
-  void dispose() {
-    // FocusManager.instance.removeListener(_handleFocusChange);
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 }

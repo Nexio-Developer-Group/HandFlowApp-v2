@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:handflow/auth/application/auth_layout_state.dart';
 import 'package:handflow/auth/presentation/pages/auth_layout.dart';
 import '../../auth/presentation/pages/login_form.dart';
 import '../../auth/presentation/pages/signup_form.dart';
@@ -23,8 +24,30 @@ final GoRouter appRouter = GoRouter(
       builder:
           (context, state, child) => MultiProvider(
             providers: [
-              ChangeNotifierProvider(create: (_) => SignupFormState()),
-              ChangeNotifierProvider(create: (_) => LoginFormState()),
+              // Provide AuthLayoutState once
+              ChangeNotifierProvider<AuthLayoutState>(
+                create: (_) {
+                  final layoutState = AuthLayoutState();
+                  layoutState.monitorKeyboard();
+                  return layoutState;
+                },
+              ),
+
+              // SignupFormState gets AuthLayoutState via context.read
+              ChangeNotifierProvider<SignupFormState>(
+                create:
+                    (context) => SignupFormState(
+                      authLayoutState: context.read<AuthLayoutState>(),
+                    ),
+              ),
+
+              // LoginFormState gets AuthLayoutState via context.read
+              ChangeNotifierProvider<LoginFormState>(
+                create:
+                    (context) => LoginFormState(
+                      authLayoutState: context.read<AuthLayoutState>(),
+                    ),
+              ),
             ],
             child: Authlayout(child: child),
           ),

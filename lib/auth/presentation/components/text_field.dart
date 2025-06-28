@@ -29,6 +29,9 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+      'CustomTextField build: controller.hashCode=${controller.hashCode}, focusNode.hashCode=${focusNode.hashCode}',
+    );
     final theme = Theme.of(context);
     final inputTheme = theme.inputDecorationTheme;
 
