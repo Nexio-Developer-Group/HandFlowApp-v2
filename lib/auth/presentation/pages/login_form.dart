@@ -48,8 +48,13 @@ class LoginForm extends StatelessWidget {
                 AuthDualButton(
                   currentPath: uri.path,
                   orange: orange,
-                  onLogin: () => context.go('/login'),
-                  onSignup: () => context.go('/signup'),
+                  onLogin: () {
+                    null;
+                  },
+                  onSignup: () {
+                    context.go('/signup');
+                    loginState.clearLoginState();
+                  },
                 ),
               Column(
                 children: [

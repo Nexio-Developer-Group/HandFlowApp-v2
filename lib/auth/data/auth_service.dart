@@ -90,6 +90,7 @@ Future<void> sendPasswordReset(String email) async {
 Future<void> saveRememberedUser(String email) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('email', email);
+  print("hehehehehe");
   // await prefs.setString('access_token', accessToken);
   // await prefs.setString('refresh_token', refreshToken);
   // await prefs.setInt('expires_in', expiresIn);
@@ -113,4 +114,3 @@ Future<void> logout() async {
   // Clear in-memory session as well
   Session().clear();
 }
-

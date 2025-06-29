@@ -32,6 +32,7 @@ class SignupForm extends StatelessWidget {
         if (signupState.successNavigate) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             context.go('/onboarding');
+            signupState.clearSignupState();
             signupState.resetNavigationFlag();
           });
         }
@@ -48,8 +49,13 @@ class SignupForm extends StatelessWidget {
                 AuthDualButton(
                   currentPath: uri.path,
                   orange: orange,
-                  onLogin: () => context.go('/login'),
-                  onSignup: () => context.go('/signup'),
+                  onLogin: () {
+                    signupState.clearSignupState();
+                    context.go('/login');
+                  },
+                  onSignup: () {
+                    null;
+                  },
                 ),
               Column(
                 children: [

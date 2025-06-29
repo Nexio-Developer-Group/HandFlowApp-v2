@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handflow/auth/application/login/login_form_state.dart';
 import '../../../shared/widgets/title_subtitle_text.dart';
 import '../../../shared/widgets/scrolling_image_widget.dart';
 import '../../application/signup/signup_form_state.dart';
@@ -22,6 +23,8 @@ class _AuthLayoutState extends State<Authlayout> {
     super.didChangeDependencies();
     if (!_initialized) {
       final signupState = Provider.of<SignupFormState>(context, listen: false);
+      final loginState  = Provider.of<LoginFormState>(context, listen: false);
+      loginState.monitorKeyboardFocus();
       signupState.monitorKeyboardFocus();
       _initialized = true;
       print("()" * 50);

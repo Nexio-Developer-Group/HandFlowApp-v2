@@ -34,7 +34,7 @@ class LoginFormState extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  void clearSignupState() {
+  void clearLoginState() {
     _inputFields["email"] = FieldState();
     _inputFields["password"] = FieldState();
     notifyListeners();
