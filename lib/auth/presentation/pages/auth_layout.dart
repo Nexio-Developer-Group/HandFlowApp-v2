@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/auth/application/login/login_form_state.dart';
-import '../../../shared/widgets/title_subtitle_text.dart';
 import '../../../shared/widgets/scrolling_image_widget.dart';
 import '../../application/signup/signup_form_state.dart';
 import 'package:provider/provider.dart';
@@ -168,35 +167,4 @@ class _AuthLayoutState extends State<Authlayout> {
       ),
     );
   }
-
-  // Widget mainContent(
-  //   BuildContext auth_context,
-  //   double screenHeight,
-  //   bool show,
-  // ) {
-  //   return Column(
-  //     children: [
-  //       if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
-  //         Padding(
-  //           padding: EdgeInsets.only(top: screenHeight * 0.037),
-  //           child: const TitleSubtitleText(
-  //             title: 'Get Started now',
-  //             subtitle: 'Create an account or log in to explore\nabout our app',
-  //           ),
-  //         ),
-  //       SizedBox(height: 16),
-  //       Expanded(
-  //         child: KeyedSubtree(
-  //           key: ValueKey(widget.child?.runtimeType),
-  //           child: widget.child ?? const SizedBox(),
-  //         ),
-  //       ),
-  //       if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
-  //         Padding(
-  //           padding: EdgeInsets.symmetric(vertical: screenHeight * 0.032),
-  //           child: Image.asset('assets/logo.png'),
-  //         ),
-  //     ],
-  //   );
-  // }
 }

@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/auth/application/forgot_password/forgot_password_state.dart';
-import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:handflow/shared/widgets/title_subtitle_text.dart';
 import 'package:provider/provider.dart';
-import '../../../shared/widgets/custom_checkbox.dart';
-import '../components/password_field.dart';
-import '../components/text_field.dart';
-import '../components/clickable_text.dart';
 import '../../application/login/login_form_state.dart';
-import '../../application/login/login_controller.dart';
-import '../components/auth_dual_button.dart';
 import '../../../shared/widgets/gradient_elevated_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -18,7 +11,7 @@ class ForgotPasswordForm extends StatelessWidget {
   const ForgotPasswordForm({super.key});
   @override
   Widget build(BuildContext context) {
-    final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
+    // final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
     final screenHeight = MediaQuery.of(context).size.height;
     return Consumer<ForgotPasswordState>(
       builder: (ctx, forgotPasswordState, _) {

@@ -61,11 +61,11 @@ class LoginForm extends StatelessWidget {
                         currentPath: uri.path,
                         orange: orange,
                         onLogin: () {
-                          null;
-                        },
-                        onSignup: () {
                           context.go('/signup');
                           loginState.clearLoginState();
+                        },
+                        onSignup: () {
+                          null;
                         },
                       ),
                     ],
