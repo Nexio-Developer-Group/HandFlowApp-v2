@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:handflow/shared/widgets/title_subtitle_text.dart';
 import 'package:provider/provider.dart';
 import '../../../shared/widgets/custom_checkbox.dart';
 import '../components/password_field.dart';
@@ -16,6 +17,7 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Consumer<LoginFormState>(
       builder: (ctx, loginState, _) {
         final controller = LoginController(loginState);
@@ -39,23 +41,39 @@ class LoginForm extends StatelessWidget {
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
-            mainAxisAlignment:
-                !ctx.watch<LoginFormState>().isKeyboardOpen
-                    ? MainAxisAlignment.spaceBetween
-                    : MainAxisAlignment.spaceEvenly,
             children: [
+              // this is top widgets
               if (!ctx.watch<LoginFormState>().isKeyboardOpen)
-                AuthDualButton(
-                  currentPath: uri.path,
-                  orange: orange,
-                  onLogin: () {
-                    null;
-                  },
-                  onSignup: () {
-                    context.go('/signup');
-                    loginState.clearLoginState();
-                  },
+                SizedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: screenHeight * 0.037),
+                        child: const TitleSubtitleText(
+                          title: 'Get Started now',
+                          subtitle:
+                              'Create an account or log in to explore\nabout our app',
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      AuthDualButton(
+                        currentPath: uri.path,
+                        orange: orange,
+                        onLogin: () {
+                          null;
+                        },
+                        onSignup: () {
+                          context.go('/signup');
+                          loginState.clearLoginState();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+
+              const Spacer(),
+
               Column(
                 children: [
                   CustomTextField(
@@ -148,13 +166,33 @@ class LoginForm extends StatelessWidget {
                   ),
                 ],
               ),
-              GradientElevatedButton(
-                onPressed:
-                    loginState.isLoading ? null : () => controller.login(),
-                child:
-                    loginState.isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text("Log In"),
+
+              const Spacer(),
+
+              SizedBox(
+                child: Column(
+                  children: [
+                    GradientElevatedButton(
+                      onPressed:
+                          loginState.isLoading
+                              ? null
+                              : () => controller.login(),
+                      child:
+                          loginState.isLoading
+                              ? const CircularProgressIndicator()
+                              : const Text("Log In"),
+                    ),
+                    if (ctx.watch<LoginFormState>().isKeyboardOpen)
+                      const Spacer(),
+                    if (!ctx.watch<LoginFormState>().isKeyboardOpen)
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: screenHeight * 0.032,
+                        ),
+                        child: Image.asset('assets/logo.png'),
+                      ),
+                  ],
+                ),
               ),
             ],
           ),

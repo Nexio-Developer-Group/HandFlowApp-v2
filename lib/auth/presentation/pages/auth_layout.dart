@@ -23,7 +23,7 @@ class _AuthLayoutState extends State<Authlayout> {
     super.didChangeDependencies();
     if (!_initialized) {
       final signupState = Provider.of<SignupFormState>(context, listen: false);
-      final loginState  = Provider.of<LoginFormState>(context, listen: false);
+      final loginState = Provider.of<LoginFormState>(context, listen: false);
       loginState.monitorKeyboardFocus();
       signupState.monitorKeyboardFocus();
       _initialized = true;
@@ -71,7 +71,7 @@ class _AuthLayoutState extends State<Authlayout> {
                   padding: EdgeInsets.symmetric(
                     horizontal: (MediaQuery.of(context).size.width * 51) / 402,
                   ),
-                  child: mainContent(context, screenHeight, show),
+                  child: widget.child,
                 )
                 : show
                 ? ScrollingBackground(
@@ -146,11 +146,7 @@ class _AuthLayoutState extends State<Authlayout> {
                                             51) /
                                         402,
                                   ),
-                                  child: mainContent(
-                                    context,
-                                    screenHeight,
-                                    show,
-                                  ),
+                                  child: widget.child,
                                 ),
                               ),
                             ],
@@ -166,41 +162,41 @@ class _AuthLayoutState extends State<Authlayout> {
                       horizontal:
                           (MediaQuery.of(context).size.width * 51) / 402,
                     ),
-                    child: mainContent(context, screenHeight, show),
+                    child: widget.child,
                   ),
                 ),
       ),
     );
   }
 
-  Widget mainContent(
-    BuildContext auth_context,
-    double screenHeight,
-    bool show,
-  ) {
-    return Column(
-      children: [
-        if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
-          Padding(
-            padding: EdgeInsets.only(top: screenHeight * 0.037),
-            child: const TitleSubtitleText(
-              title: 'Get Started now',
-              subtitle: 'Create an account or log in to explore\nabout our app',
-            ),
-          ),
-        SizedBox(height: 16),
-        Expanded(
-          child: KeyedSubtree(
-            key: ValueKey(widget.child?.runtimeType),
-            child: widget.child ?? const SizedBox(),
-          ),
-        ),
-        if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.032),
-            child: Image.asset('assets/logo.png'),
-          ),
-      ],
-    );
-  }
+  // Widget mainContent(
+  //   BuildContext auth_context,
+  //   double screenHeight,
+  //   bool show,
+  // ) {
+  //   return Column(
+  //     children: [
+  //       if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
+  //         Padding(
+  //           padding: EdgeInsets.only(top: screenHeight * 0.037),
+  //           child: const TitleSubtitleText(
+  //             title: 'Get Started now',
+  //             subtitle: 'Create an account or log in to explore\nabout our app',
+  //           ),
+  //         ),
+  //       SizedBox(height: 16),
+  //       Expanded(
+  //         child: KeyedSubtree(
+  //           key: ValueKey(widget.child?.runtimeType),
+  //           child: widget.child ?? const SizedBox(),
+  //         ),
+  //       ),
+  //       if (!auth_context.watch<SignupFormState>().isKeyboardOpen)
+  //         Padding(
+  //           padding: EdgeInsets.symmetric(vertical: screenHeight * 0.032),
+  //           child: Image.asset('assets/logo.png'),
+  //         ),
+  //     ],
+  //   );
+  // }
 }

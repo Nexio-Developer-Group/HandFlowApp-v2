@@ -9,6 +9,7 @@ import '../../auth/presentation/pages/forgot_password.dart';
 import 'package:provider/provider.dart';
 import '../../auth/application/signup/signup_form_state.dart';
 import '../../auth/application/login/login_form_state.dart';
+import '../../auth/application/forgot_password/forgot_password_state.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/home',
@@ -25,6 +26,7 @@ final GoRouter appRouter = GoRouter(
             providers: [
               ChangeNotifierProvider(create: (_) => SignupFormState()),
               ChangeNotifierProvider(create: (_) => LoginFormState()),
+              ChangeNotifierProvider(create: (_) => ForgotPasswordState()),
             ],
             child: Authlayout(child: child),
           ),
@@ -43,7 +45,7 @@ final GoRouter appRouter = GoRouter(
           path: '/forgot-password',
           pageBuilder:
               (context, state) =>
-                  NoTransitionPage(child: const ForgotPasswordPage()),
+                  NoTransitionPage(child: const ForgotPasswordForm()),
         ),
       ],
     ),

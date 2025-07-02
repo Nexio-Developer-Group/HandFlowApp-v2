@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:handflow/shared/widgets/title_subtitle_text.dart';
 import '../components/password_field.dart';
 import '../components/text_field.dart';
 import '../components/auth_dual_button.dart';
@@ -14,6 +15,7 @@ class SignupForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Consumer<SignupFormState>(
       builder: (ctx, signupState, _) {
@@ -45,18 +47,38 @@ class SignupForm extends StatelessWidget {
                     ? MainAxisAlignment.spaceBetween
                     : MainAxisAlignment.spaceEvenly,
             children: [
+              // this is top widgets
               if (!ctx.watch<SignupFormState>().isKeyboardOpen)
-                AuthDualButton(
-                  currentPath: uri.path,
-                  orange: orange,
-                  onLogin: () {
-                    signupState.clearSignupState();
-                    context.go('/login');
-                  },
-                  onSignup: () {
-                    null;
-                  },
+                SizedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: screenHeight * 0.037),
+                        child: const TitleSubtitleText(
+                          title: 'Get Started now',
+                          subtitle:
+                              'Create an account or log in to explore\nabout our app',
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      AuthDualButton(
+                        currentPath: uri.path,
+                        orange: orange,
+                        onLogin: () {
+                          null;
+                        },
+                        onSignup: () {
+                          context.go('/login');
+                          signupState.clearSignupState();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+
+              const Spacer(),
+
               Column(
                 children: [
                   CustomTextField(
@@ -125,17 +147,32 @@ class SignupForm extends StatelessWidget {
                 ],
               ),
 
-              GradientElevatedButton(
-                onPressed:
-                    signupState.isLoading
-                        ? null
-                        : () {
-                          controller.signup();
-                        },
-                child:
-                    signupState.isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text("Sign Up"),
+              const Spacer(),
+
+              SizedBox(
+                child: Column(
+                  children: [
+                    GradientElevatedButton(
+                      onPressed:
+                          signupState.isLoading
+                              ? null
+                              : () => controller.signup(),
+                      child:
+                          signupState.isLoading
+                              ? const CircularProgressIndicator()
+                              : const Text("Log In"),
+                    ),
+                    if (ctx.watch<SignupFormState>().isKeyboardOpen)
+                      const Spacer(),
+                    if (!ctx.watch<SignupFormState>().isKeyboardOpen)
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: screenHeight * 0.032,
+                        ),
+                        child: Image.asset('assets/logo.png'),
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
