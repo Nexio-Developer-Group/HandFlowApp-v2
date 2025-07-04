@@ -47,6 +47,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   provider: ^6.1.5
   pin_code_fields: ^8.0.1
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -75,8 +76,15 @@ flutter:
     - assets/icon1.png
     - assets/placeholder.png
     - assets/find_qr.png
-    - assets/animation.json
-    - assets/scanqr.json
+    - assets/animations/animation1.json
+    - assets/animations/animation2.json
+    - assets/animations/Welcome.json
+    - assets/animations/instruct_scan_qr.json
+    - assets/animations/scanqr.json 
+    - assets/animations/pairing.json
+    - assets/animations/wifi_setup.json
+    - assets/animations/test_connection.json
+    - assets/animations/confirm_your_device.json
     - assets/background.png
     - assets/logo.png
 

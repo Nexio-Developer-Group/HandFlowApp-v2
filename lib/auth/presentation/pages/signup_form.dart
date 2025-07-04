@@ -66,18 +66,16 @@ class SignupForm extends StatelessWidget {
                         currentPath: uri.path,
                         orange: orange,
                         onLogin: () {
-                          null;
-                        },
-                        onSignup: () {
                           context.go('/login');
                           signupState.clearSignupState();
+                        },
+                        onSignup: () {
+                          null;
                         },
                       ),
                     ],
                   ),
                 ),
-
-              const Spacer(),
 
               Column(
                 children: [
@@ -147,8 +145,6 @@ class SignupForm extends StatelessWidget {
                 ],
               ),
 
-              const Spacer(),
-
               SizedBox(
                 child: Column(
                   children: [
@@ -162,8 +158,6 @@ class SignupForm extends StatelessWidget {
                               ? const CircularProgressIndicator()
                               : const Text("Log In"),
                     ),
-                    if (ctx.watch<SignupFormState>().isKeyboardOpen)
-                      const Spacer(),
                     if (!ctx.watch<SignupFormState>().isKeyboardOpen)
                       Padding(
                         padding: EdgeInsets.symmetric(

@@ -83,11 +83,41 @@ ThemeData appTheme = ThemeData(
   ),
 
   outlinedButtonTheme: OutlinedButtonThemeData(
-    style: OutlinedButton.styleFrom(
-      // maximumSize: Size(0, 10),
-      side: BorderSide(color: Colors.black38),
-      backgroundColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+    style: ButtonStyle(
+      minimumSize: WidgetStatePropertyAll(Size(double.infinity, 50)),
+      maximumSize: WidgetStatePropertyAll(
+        Size(double.infinity, double.infinity),
+      ),
+      backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.white;
+        }
+        return const Color(0xFFFFF5F5); // light pink background when unselected
+      }),
+      foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return orange;
+        }
+        return Colors.black54;
+      }),
+      side: WidgetStateProperty.resolveWith<BorderSide?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return BorderSide(color: orange, width: 1.5);
+        }
+        return const BorderSide(color: Colors.black26, width: 1);
+      }),
+      shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      textStyle: WidgetStatePropertyAll(
+        const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
+      overlayColor: WidgetStatePropertyAll(Colors.transparent),
+      splashFactory: NoSplash.splashFactory,
+      elevation: WidgetStatePropertyAll(0),
+      surfaceTintColor: WidgetStatePropertyAll(Colors.transparent),
+      shadowColor: WidgetStatePropertyAll(Colors.transparent),
     ),
   ),
 

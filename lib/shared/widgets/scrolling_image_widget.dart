@@ -3,14 +3,10 @@ import 'package:flutter/scheduler.dart';
 import 'dart:ui' as ui;
 
 class ScrollingBackground extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final Widget background; // 👈 New field for external background
 
-  const ScrollingBackground({
-    super.key,
-    required this.child,
-    required this.background,
-  });
+  const ScrollingBackground({super.key, this.child, required this.background});
 
   @override
   State<ScrollingBackground> createState() => _ScrollingBackgroundState();
@@ -96,7 +92,7 @@ class _ScrollingBackgroundState extends State<ScrollingBackground>
           ),
 
         // 3️⃣ Foreground widget
-        widget.child,
+        widget.child ?? Container(),
       ],
     );
   }

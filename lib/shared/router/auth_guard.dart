@@ -23,8 +23,7 @@ Future<String?> authGuard(BuildContext context, GoRouterState state) async {
   final path = state.uri.path;
 
   // List of public (auth) routes
-  const publicRoutes = ['/login', '/signup', '/forgot-password'];
-  print(loggedIn);
+  const publicRoutes = ['/login', '/signup', '/forgot-password', '/onboarding'];
 
   if (!loggedIn && !publicRoutes.contains(path)) {
     return '/login';

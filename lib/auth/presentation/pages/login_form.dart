@@ -41,6 +41,10 @@ class LoginForm extends StatelessWidget {
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
+            mainAxisAlignment:
+                !ctx.watch<LoginFormState>().isKeyboardOpen
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.spaceEvenly,
             children: [
               // this is top widgets
               if (!ctx.watch<LoginFormState>().isKeyboardOpen)
@@ -61,18 +65,16 @@ class LoginForm extends StatelessWidget {
                         currentPath: uri.path,
                         orange: orange,
                         onLogin: () {
-                          context.go('/signup');
-                          loginState.clearLoginState();
+                          null;
                         },
                         onSignup: () {
-                          null;
+                          context.go('/signup');
+                          loginState.clearLoginState();
                         },
                       ),
                     ],
                   ),
                 ),
-
-              const Spacer(),
 
               Column(
                 children: [
@@ -167,8 +169,6 @@ class LoginForm extends StatelessWidget {
                 ],
               ),
 
-              const Spacer(),
-
               SizedBox(
                 child: Column(
                   children: [
@@ -182,8 +182,6 @@ class LoginForm extends StatelessWidget {
                               ? const CircularProgressIndicator()
                               : const Text("Log In"),
                     ),
-                    if (ctx.watch<LoginFormState>().isKeyboardOpen)
-                      const Spacer(),
                     if (!ctx.watch<LoginFormState>().isKeyboardOpen)
                       Padding(
                         padding: EdgeInsets.symmetric(
