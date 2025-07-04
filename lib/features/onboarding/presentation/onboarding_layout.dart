@@ -19,7 +19,7 @@ class OnboardingLayout extends StatelessWidget {
         return Scaffold(
           body: PageView(
             controller: onboardingState.getPageController,
-            // physics: const NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               OnboardingScreenPage(
                 model: onboardingState.getPageContent["welcome_page"]!.copyWith(
@@ -35,7 +35,7 @@ class OnboardingLayout extends StatelessWidget {
               OnboardingScreenPage(
                 model: onboardingState.getPageContent["instruct_scan_qr"]!.copyWith(
                   child: Lottie.asset(
-                    'assets/animations/animation1.json', // path to your Lottie file
+                    'assets/animations/scanqr.json', // path to your Lottie file
                     width:
                         size.height * 320 / 874, // set width/height as needed
                     height: size.height * 320 / 874,

@@ -8,6 +8,8 @@ class SignupController {
   SignupController(this.state);
 
   Future<void> signup() async {
+
+    if (state.isLoading) return;
     // Clear previous messages
     state.setSnackbarMessage(null);
     state.setLoading(true);

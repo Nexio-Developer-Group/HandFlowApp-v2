@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 
 PageController _onboardingPageController = PageController();
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/onboarding',
+  initialLocation: '/home',
   redirect: (context, state) async => await authGuard(context, state),
   routes: [
     GoRoute(path: '/home', builder: (context, state) => const HomePage()),

@@ -76,7 +76,6 @@ flutter:
     - assets/icon1.png
     - assets/placeholder.png
     - assets/find_qr.png
-    - assets/animations/animation1.json
     - assets/animations/animation2.json
     - assets/animations/Welcome.json
     - assets/animations/instruct_scan_qr.json

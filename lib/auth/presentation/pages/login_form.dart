@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handflow/auth/application/signup/signup_form_state.dart';
 import 'package:handflow/shared/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:handflow/shared/widgets/title_subtitle_text.dart';
@@ -177,10 +178,9 @@ class LoginForm extends StatelessWidget {
                           loginState.isLoading
                               ? null
                               : () => controller.login(),
-                      child:
-                          loginState.isLoading
-                              ? const CircularProgressIndicator()
-                              : const Text("Log In"),
+                      isLoading: loginState.isLoading,
+                      enabled: !loginState.isLoading,
+                      child: const Text("Log In"),
                     ),
                     if (!ctx.watch<LoginFormState>().isKeyboardOpen)
                       Padding(

@@ -17,7 +17,7 @@ class AuthDualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double buttonHeight = MediaQuery.of(context).size.height * 36 / 650;
-    const customGrey = Color(0xFFF5F6F9);
+    const customGrey = Color(0xFFE1E3E6);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

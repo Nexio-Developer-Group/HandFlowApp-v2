@@ -153,10 +153,9 @@ class SignupForm extends StatelessWidget {
                           signupState.isLoading
                               ? null
                               : () => controller.signup(),
-                      child:
-                          signupState.isLoading
-                              ? const CircularProgressIndicator()
-                              : const Text("Log In"),
+                      isLoading: signupState.isLoading,
+                      enabled: !signupState.isLoading,
+                      child: const Text("Sign Up"),
                     ),
                     if (!ctx.watch<SignupFormState>().isKeyboardOpen)
                       Padding(

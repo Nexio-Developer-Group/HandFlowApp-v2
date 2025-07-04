@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:handflow/shared/widgets/scrolling_image_widget.dart';
-import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/onboarding_screen_model.dart';
 import '../../../shared/widgets/title_subtitle_text.dart';
@@ -19,8 +18,8 @@ class OnboardingScreenPage extends StatelessWidget {
       vertical: size.height * 46 / 874,
     );
 
-    final lowerHeight = size.height * 0.36;
-    final upperHeight = size.height - lowerHeight;
+    // final lowerHeight = size.height * 0.36;
+    // final upperHeight = size.height - lowerHeight;
 
     return Scaffold(
       body: ScrollingBackground(
@@ -59,6 +58,8 @@ class OnboardingScreenPage extends StatelessWidget {
                         TitleSubtitleText(
                           title: model.title,
                           subtitle: model.description,
+                          titleStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                          subtitleStyle: Theme.of(context).textTheme.bodyMedium,
                         ),
                         Spacer(),
                         SmoothPageIndicator(

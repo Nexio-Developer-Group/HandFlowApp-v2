@@ -6,6 +6,9 @@ class LoginController {
   LoginController(this.state);
 
   Future<void> login() async {
+
+    if (state.isLoading) return;
+
     // Clear previous messages
     state.setSnackbarMessage(null);
     state.setLoading(true);
@@ -67,6 +70,4 @@ class LoginController {
       }
     }
   }
-
-  
 }
