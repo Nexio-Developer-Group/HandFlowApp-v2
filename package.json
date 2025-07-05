@@ -1,0 +1,35 @@
+{
+  "name": "handflowapp-v2",
+  "version": "1.0.0",
+  "description": "This app is to controll the devices connected to your HandFlow-Controller at ease of you fingers; keeping the user experience at the core.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nexio-Developer-Group/HandFlowApp-v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Nexio-Developer-Group/HandFlowApp-v2/issues"
+  },
+  "homepage": "https://github.com/Nexio-Developer-Group/HandFlowApp-v2#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "nodemailer": "^7.0.4",
+    "xss-clean": "^0.1.4"
+  }
+}
